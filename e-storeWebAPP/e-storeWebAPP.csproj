@@ -25,9 +25,13 @@
 
   <ItemGroup>
     <Folder Include="DTOModels\" />
-    <Folder Include="Extensions\" />
     <Folder Include="Services\" />
     <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
+    <ProjectReference Include="..\DataDomain\DataDomain.csproj" />
   </ItemGroup>
 
 </Project>
