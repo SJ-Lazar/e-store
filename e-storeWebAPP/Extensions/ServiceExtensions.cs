@@ -19,6 +19,17 @@ namespace e_storeWebAPP.Extensions
     public static class ServiceExtensions
     {
         #region Services Configure Methods
+        public static void ConfigureCors(this IServiceCollection services)
+        {
+            //Cors Service
+            services.AddCors(c => {
+                c.AddPolicy("AllowAllPolicy",
+                    builder =>
+                        builder.AllowAnyOrigin()
+                                .AllowAnyMethod()
+                                .AllowAnyHeader());
+            });
+        }
         public static void ConfigureDbContext(this IServiceCollection services, IConfiguration Configuration)
         {
             //DbContext Service

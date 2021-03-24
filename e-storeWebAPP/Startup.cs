@@ -1,5 +1,7 @@
 using DataAccessLayer.Context;
 using e_storeWebAPP.Extensions;
+using e_storeWebAPP.Mapper;
+using e_storeWebAPP.Repositories.UnitsofWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,12 +36,20 @@ namespace e_storeWebAPP
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Cors
+            services.ConfigureCors();
+
             //Controllers
             services.AddControllers();
 
             services.ConfigureIdentity();
 
             services.ConfigureDbContext(Configuration);
+            //AutoMapper Service
+            services.AddAutoMapper(typeof(MapperInitilizer));
+
+            //UnitOfWork Service
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             //Swagger
             services.AddSwaggerGen(c =>
@@ -68,6 +78,8 @@ namespace e_storeWebAPP
             //Redirections
             app.UseHttpsRedirection();
 
+            //Cors
+            app.UseCors("AllowAllPolicy");
             //Routing
             app.UseRouting();
 
