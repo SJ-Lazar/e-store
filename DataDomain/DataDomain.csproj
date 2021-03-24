@@ -4,4 +4,11 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="DataTables\Books\" />
+    <Folder Include="DataTables\Base\" />
+    <Folder Include="DataTables\Products\" />
+    <Folder Include="DataTables\Sales\" />
+  </ItemGroup>
+
 </Project>
