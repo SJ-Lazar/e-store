@@ -168,6 +168,21 @@ namespace DataAccessLayer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Books",
+                columns: new[] { "Id", "ISBN", "Title" },
+                values: new object[] { 1, "9780061964367", "Pride and Prejudice" });
+
+            migrationBuilder.InsertData(
+                table: "Books",
+                columns: new[] { "Id", "ISBN", "Title" },
+                values: new object[] { 2, "9780316160193", "New Moon(Twilight)" });
+
+            migrationBuilder.InsertData(
+                table: "Books",
+                columns: new[] { "Id", "ISBN", "Title" },
+                values: new object[] { 3, "9780316015844", "Twilight" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",

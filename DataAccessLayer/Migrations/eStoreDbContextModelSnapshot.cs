@@ -106,6 +106,26 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Books");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ISBN = "9780061964367",
+                            Title = "Pride and Prejudice"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ISBN = "9780316160193",
+                            Title = "New Moon(Twilight)"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ISBN = "9780316015844",
+                            Title = "Twilight"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
