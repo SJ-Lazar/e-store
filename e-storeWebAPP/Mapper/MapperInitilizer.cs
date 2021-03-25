@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using DataDomain.DataTables.Books;
+using DataDomain.DataTables.Sales;
+using DataDomain.DataTables.Transactions;
 using e_storeWebAPP.DTOModels;
 using System;
 using System.Collections.Generic;
@@ -14,7 +16,12 @@ namespace e_storeWebAPP.Mapper
         {
             CreateMap<Book, BookDTO>().ReverseMap();
             CreateMap<Book, CreateBookDTO>().ReverseMap();
-
+            CreateMap<SaleItem, SaleItemDTO>().ReverseMap();
+            CreateMap<SaleItem, CreateSaleItemDTO>().ReverseMap();
+            CreateMap<Invoice, InvoiceDTO>().ReverseMap();
+            CreateMap<Invoice, CreateInvoiceDTO>().ReverseMap();
+            CreateMap<Receipt, ReceiptDTO>().ReverseMap();
+            CreateMap<Receipt, CreateReceiptDTO>().ReverseMap();
         }
     }
 }

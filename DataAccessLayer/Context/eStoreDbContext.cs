@@ -15,8 +15,11 @@ namespace DataAccessLayer.Context
 {
     public  class eStoreDbContext : IdentityDbContext<User>
     {
-        public eStoreDbContext(DbContextOptions options) : base(options) { }
+        #region Constructor
+        public eStoreDbContext(DbContextOptions options) : base(options) { } 
+        #endregion
 
+        #region DbSets
         public DbSet<Book> Books { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<AudioBook> AudioBooks { get; set; }
@@ -27,12 +30,18 @@ namespace DataAccessLayer.Context
         public DbSet<Tax> Taxes { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
-     
+        #endregion
+
+        #region Override Methods
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new BookConfiguration());
-        }
+            builder.ApplyConfiguration(new StockConfiguration());
+            builder.ApplyConfiguration(new DiscountConfiguration());
+            builder.ApplyConfiguration(new TaxConfiguration());
+        } 
+        #endregion
     }
 }
