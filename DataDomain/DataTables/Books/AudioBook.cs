@@ -5,9 +5,8 @@ using System.Text;
 
 namespace DataDomain.DataTables.Books
 {
-    public class Book : Product
+    public class AudioBook : Book
     {
-        public string ISBN { get; set; }
-        public string Title { get; set; }
+        public string VoicedBy { get; set; }
     }
 }
