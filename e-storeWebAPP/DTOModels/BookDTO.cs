@@ -8,6 +8,10 @@ namespace e_storeWebAPP.DTOModels
 {
     public class CreateBookDTO 
     {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public decimal PurchasePrice { get; set; }
+        public decimal SalePrice { get; set; }
         [Required]
         [StringLength(maximumLength: 13, ErrorMessage = "ISBN Cannot Exceed 13 Characters")]
         public string ISBN { get; set; }
