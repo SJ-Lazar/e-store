@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataDomain.DataTables.Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -18,12 +19,19 @@ namespace e_storeWebAPP.DTOModels
         [Required]
         [StringLength(maximumLength: 250, ErrorMessage = "Book Title Is Too Long")]
         public string Title { get; set; }
+        public string ImagePath { get; set; }
+        public int DiscountId { get; set; }
+        public int TaxId { get; set; }
     }
     public class BookDTO : CreateBookDTO
     {
         public int Id { get; set; }
+
+        public DiscountDTO Discount {get; set;}
+        public TaxDTO Tax { get; set; }
+
     }
-    public class UpdateBookDTO : CreateBookDTO
+    public class UpdateBookDTO : BookDTO
     {
 
     }

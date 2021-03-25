@@ -21,7 +21,6 @@ namespace DataAccessLayer.Context
 
         #region DbSets
         public DbSet<Book> Books { get; set; }
-        public DbSet<Image> Images { get; set; }
         public DbSet<AudioBook> AudioBooks { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -36,6 +35,8 @@ namespace DataAccessLayer.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+           
 
             builder.ApplyConfiguration(new BookConfiguration());
             builder.ApplyConfiguration(new StockConfiguration());

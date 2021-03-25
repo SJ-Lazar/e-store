@@ -40,7 +40,7 @@ namespace e_storeWebAPP.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetBooks()
         {         
-            var books = await _uow.Books.GetAll();
+            var books = await _uow.Books.GetAll(includes: new List<string> { "Discount", "Tax" });
             var results = _mapper.Map<IList<BookDTO>>(books);
             return Ok(results);     
         }
@@ -51,7 +51,7 @@ namespace e_storeWebAPP.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetBook(int id)
         {
-            var book = await _uow.Books.Get(q => q.Id == id);
+            var book = await _uow.Books.Get(q => q.Id == id, includes: new List<string> { "Discount", "Tax" });
             var result = _mapper.Map<BookDTO>(book);
             return Ok(result);
         }

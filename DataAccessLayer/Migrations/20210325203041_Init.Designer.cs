@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(eStoreDbContext))]
-    [Migration("20210325011220_AddedNewSeedData")]
-    partial class AddedNewSeedData
+    [Migration("20210325203041_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,21 +20,6 @@ namespace DataAccessLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("DataDomain.DataTables.Base.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Images");
-                });
 
             modelBuilder.Entity("DataDomain.DataTables.Base.User", b =>
                 {
@@ -157,8 +142,14 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("DiscountId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Discriminator")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -170,7 +161,14 @@ namespace DataAccessLayer.Migrations
                     b.Property<decimal>("SalePrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("TaxId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("DiscountId");
+
+                    b.HasIndex("TaxId");
 
                     b.ToTable("Products");
 
@@ -222,9 +220,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DiscountId")
-                        .HasColumnType("int");
-
                     b.Property<int>("InvoiceId")
                         .HasColumnType("int");
 
@@ -234,21 +229,14 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("TaxId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DiscountId");
-
                     b.HasIndex("InvoiceId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("TaxId");
 
                     b.ToTable("SaleItems");
                 });
@@ -333,21 +321,6 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("InvoiceId");
 
                     b.ToTable("Receipts");
-                });
-
-            modelBuilder.Entity("ImageProduct", b =>
-                {
-                    b.Property<int>("ImagesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ImagesId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("ImageProduct");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -497,32 +470,41 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Fiction Book by Jane",
+                            Description = "Fiction Book by Jane Austen",
+                            DiscountId = 1,
+                            ImagePath = "assets/Products/Books/pp.jpg",
                             Name = "Book Pride and Prejudice",
                             PurchasePrice = 59.99m,
                             SalePrice = 99.50m,
+                            TaxId = 1,
                             ISBN = "9780061964367",
                             Title = "Pride and Prejudice"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "Fiction Book by Jane",
-                            Name = "Book New Moon(Twilight)",
+                            Description = "Fiction Book by GEORGE RR MARTIN",
+                            DiscountId = 2,
+                            ImagePath = "assets/Products/Books/got.jpg",
+                            Name = "A Game Of Thrones",
                             PurchasePrice = 80.90m,
                             SalePrice = 12.30m,
+                            TaxId = 1,
                             ISBN = "9780316160193",
-                            Title = "New Moon(Twilight)"
+                            Title = "A Game Of Thrones (A song of fire and ice)"
                         },
                         new
                         {
                             Id = 3,
-                            Description = "Fiction Book by RR Martin",
-                            Name = "A song of ice and fire",
+                            Description = "Fiction Book by Dr. Henry Cloud",
+                            DiscountId = 3,
+                            ImagePath = "assets/Products/Books/boundaries.jpg",
+                            Name = "Boundaries",
                             PurchasePrice = 259.99m,
                             SalePrice = 199.50m,
+                            TaxId = 1,
                             ISBN = "9780316015844",
-                            Title = "A song of ice and fire"
+                            Title = "Boundaries when to say Yes and No"
                         });
                 });
 
@@ -547,7 +529,7 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("DataDomain.DataTables.Sales.SaleItem", b =>
+            modelBuilder.Entity("DataDomain.DataTables.Products.Product", b =>
                 {
                     b.HasOne("DataDomain.DataTables.Sales.Discount", "Discount")
                         .WithMany()
@@ -555,6 +537,19 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataDomain.DataTables.Sales.Tax", "Tax")
+                        .WithMany()
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Discount");
+
+                    b.Navigation("Tax");
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Sales.SaleItem", b =>
+                {
                     b.HasOne("DataDomain.DataTables.Transactions.Invoice", "Invoice")
                         .WithMany("SaleItems")
                         .HasForeignKey("InvoiceId")
@@ -567,19 +562,9 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataDomain.DataTables.Sales.Tax", "Tax")
-                        .WithMany()
-                        .HasForeignKey("TaxId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Discount");
-
                     b.Navigation("Invoice");
 
                     b.Navigation("Product");
-
-                    b.Navigation("Tax");
                 });
 
             modelBuilder.Entity("DataDomain.DataTables.Transactions.Receipt", b =>
@@ -591,21 +576,6 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Invoice");
-                });
-
-            modelBuilder.Entity("ImageProduct", b =>
-                {
-                    b.HasOne("DataDomain.DataTables.Base.Image", null)
-                        .WithMany()
-                        .HasForeignKey("ImagesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataDomain.DataTables.Products.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

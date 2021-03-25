@@ -22,6 +22,10 @@ namespace e_storeWebAPP.Mapper
             CreateMap<Invoice, CreateInvoiceDTO>().ReverseMap();
             CreateMap<Receipt, ReceiptDTO>().ReverseMap();
             CreateMap<Receipt, CreateReceiptDTO>().ReverseMap();
+            CreateMap<Tax, TaxDTO>().ReverseMap();
+            CreateMap<Tax, CreateTaxDTO>().ReverseMap();
+            CreateMap<Discount, DiscountDTO>().ReverseMap();
+            CreateMap<Discount, CreateDiscountDTO>().ReverseMap();
         }
     }
 }

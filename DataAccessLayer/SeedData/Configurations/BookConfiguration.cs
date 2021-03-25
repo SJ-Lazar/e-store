@@ -1,4 +1,5 @@
-﻿using DataDomain.DataTables.Books;
+﻿using DataDomain.DataTables.Base;
+using DataDomain.DataTables.Books;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -19,29 +20,43 @@ namespace DataAccessLayer.SeedData.Configurations
                            Name = "Book Pride and Prejudice",
                            PurchasePrice = 59.99M,
                            SalePrice = 99.50M,
-                           Description = "Fiction Book by Jane",
+                           Description = "Fiction Book by Jane Austen",
                            ISBN = "9780061964367",
                            Title = "Pride and Prejudice",
+                           ImagePath = "assets/Products/Books/pp.jpg",
+                           DiscountId = 1,
+                           TaxId = 1
+
+
+
                        },
                        new Book
                        {
                            Id = 2,
-                           Name = "Book New Moon(Twilight)",
+                           Name = "A Game Of Thrones",
                            PurchasePrice = 80.90M,
                            SalePrice = 12.30M,
-                           Description = "Fiction Book by Jane",
+                           Description = "Fiction Book by GEORGE RR MARTIN",
                            ISBN = "9780316160193",
-                           Title = "New Moon(Twilight)",
+                           Title = "A Game Of Thrones (A song of fire and ice)",
+                           ImagePath = "assets/Products/Books/got.jpg",
+                           DiscountId = 2,
+                           TaxId = 1
+
                        },
                        new Book
                        {
                            Id = 3,
-                           Name = "A song of ice and fire",
+                           Name = "Boundaries",
                            PurchasePrice = 259.99M,
                            SalePrice = 199.50M,
-                           Description = "Fiction Book by RR Martin",
+                           Description = "Fiction Book by Dr. Henry Cloud",
                            ISBN = "9780316015844",
-                           Title = "A song of ice and fire",
+                           Title = "Boundaries when to say Yes and No",
+                           ImagePath = "assets/Products/Books/boundaries.jpg",
+                           DiscountId = 3,
+                           TaxId = 1
+
                        });
             #endregion
         }
