@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(eStoreDbContext))]
-    [Migration("20210325203041_Init")]
+    [Migration("20210326173034_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -220,6 +220,9 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Discount")
+                        .HasColumnType("int");
+
                     b.Property<int>("InvoiceId")
                         .HasColumnType("int");
 
@@ -227,6 +230,9 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Tax")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Total")
@@ -273,9 +279,6 @@ namespace DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("DiscountTotal")
                         .HasColumnType("decimal(18,2)");
@@ -532,13 +535,13 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("DataDomain.DataTables.Products.Product", b =>
                 {
                     b.HasOne("DataDomain.DataTables.Sales.Discount", "Discount")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("DiscountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("DataDomain.DataTables.Sales.Tax", "Tax")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("TaxId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -627,6 +630,16 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Sales.Discount", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Sales.Tax", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("DataDomain.DataTables.Transactions.Invoice", b =>

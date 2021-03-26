@@ -9,7 +9,6 @@ namespace DataDomain.DataTables.Transactions
     {
         public int Id { get; set; }
         public string Reference { get; set; }
-        public DateTime Date { get; set; }
         public decimal SubTotal { get; set; }
         public decimal DiscountTotal { get; set; }
         public decimal TaxTotal { get; set; }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DataDomain.DataTables.Base;
 using DataDomain.DataTables.Books;
 using DataDomain.DataTables.Sales;
 using DataDomain.DataTables.Transactions;
@@ -26,6 +27,9 @@ namespace e_storeWebAPP.Mapper
             CreateMap<Tax, CreateTaxDTO>().ReverseMap();
             CreateMap<Discount, DiscountDTO>().ReverseMap();
             CreateMap<Discount, CreateDiscountDTO>().ReverseMap();
+            CreateMap<User, RegisterUserDTO>().ReverseMap();
+            CreateMap<User, LoginUserDTO>().ReverseMap();
+            CreateMap<User, ConfirmEmailUserDTO>().ReverseMap();
         }
     }
 }

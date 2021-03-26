@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Context;
 using DataDomain.DataTables.Base;
 using e_storeWebAPP.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -8,10 +9,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace e_storeWebAPP.Extensions
@@ -39,20 +42,19 @@ namespace e_storeWebAPP.Extensions
         }
         public static void ConfigureIdentity(this IServiceCollection services)
         {
-            var builder = services.AddIdentityCore<User>(q =>
-            {
-                q.Password.RequireDigit = false;
-                q.Password.RequiredLength = 4;
-                q.Password.RequireLowercase = false;
-                q.Password.RequireUppercase = false;
-                q.Password.RequiredUniqueChars = 0;
-                q.Password.RequireNonAlphanumeric = false;
-                q.User.RequireUniqueEmail = true;
+            services.AddIdentity<User, IdentityRole>(
+               opt =>
+               {
+                   opt.Password.RequireDigit = false;
+                   opt.Password.RequireLowercase = false;
+                   opt.Password.RequireNonAlphanumeric = false;
+                   opt.Password.RequireUppercase = false;
+                   opt.Password.RequiredLength = 4;
 
-            });
-
-            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), services);
-            builder.AddEntityFrameworkStores<eStoreDbContext>();
+                   opt.User.RequireUniqueEmail = true;
+                   opt.SignIn.RequireConfirmedEmail = true;
+               }
+               ).AddEntityFrameworkStores<eStoreDbContext>().AddDefaultTokenProviders();
 
         }
         public static void ConfigureExceptionHandler(this IApplicationBuilder app)
@@ -77,6 +79,44 @@ namespace e_storeWebAPP.Extensions
 
             });
         } 
+        public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration Configuration)
+        {
+            services.AddAuthentication(cfg =>
+            {
+                cfg.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                cfg.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Token:Key"])),
+                    ValidIssuer = Configuration["Token:Issuer"],
+                    ValidateIssuer = true,
+                    ValidateAudience = false,
+                };
+            });
+        }
+        public static void ConfigureAuthorization(this IServiceCollection services)
+        {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ManagerDevelopers", md =>
+                {
+                    md.RequireClaim("jobtitle", "Developer");
+                    md.RequireRole("Manager");
+                });
+
+                options.AddPolicy("AdminDevelopers", ad =>
+                {
+                    ad.RequireClaim("jobtitle", "Developer");
+                    ad.RequireRole("Administrator");
+                });
+
+            });
+        }
+
         #endregion
     }
 

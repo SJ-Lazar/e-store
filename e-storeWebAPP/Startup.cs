@@ -2,6 +2,8 @@ using DataAccessLayer.Context;
 using e_storeWebAPP.Extensions;
 using e_storeWebAPP.Mapper;
 using e_storeWebAPP.Repositories.UnitsofWork;
+using e_storeWebAPP.Services.Email;
+using e_storeWebAPP.Services.Token;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -44,6 +46,16 @@ namespace e_storeWebAPP
 
             services.ConfigureIdentity();
 
+            services.ConfigureAuthentication(Configuration);
+
+            //TokenGeneration
+            services.AddScoped<IJWTTokenGenerator, JWTTokenGenerator>();
+
+            //Email Service
+            services.AddSingleton<IEmailSender, EmailSender>();
+
+            services.ConfigureAuthorization();
+
             services.ConfigureDbContext(Configuration);
             //AutoMapper Service
             services.AddAutoMapper(typeof(MapperInitilizer));
@@ -63,6 +75,7 @@ namespace e_storeWebAPP
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //Development Ckeck
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -80,8 +93,12 @@ namespace e_storeWebAPP
 
             //Cors
             app.UseCors("AllowAllPolicy");
+
             //Routing
             app.UseRouting();
+
+            //Authentication
+            app.UseAuthentication();
 
             //Authoriazation
             app.UseAuthorization();
