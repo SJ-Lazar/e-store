@@ -19,6 +19,70 @@ namespace DataAccessLayer.Migrations
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("DataDomain.DataTables.Base.Gender", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Sex")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Sex = "Male"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Sex = "Female"
+                        });
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Base.Title", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Titles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Mr"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Mrs"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Miss"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Dr"
+                        });
+                });
+
             modelBuilder.Entity("DataDomain.DataTables.Base.User", b =>
                 {
                     b.Property<string>("Id")
@@ -88,6 +152,148 @@ namespace DataAccessLayer.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "8a2956f3-aaea-4b1c-ad71-989d7287eef8",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "06bdc312-e235-4a39-9707-d8df79bbb947",
+                            EmailConfirmed = true,
+                            FirstName = "salman",
+                            LastName = "lazar",
+                            LockoutEnabled = false,
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "1234",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "8bdd7d75-7071-4425-ac45-e9c81c713a1b",
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
+                        });
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Books.Author", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GenderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LasteName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TitleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GenderId");
+
+                    b.HasIndex("TitleId");
+
+                    b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Books.BookJoins.BookAuthor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("BookAuthors");
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Books.BookJoins.BookCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("BookCategories");
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Books.BookJoins.BookGenre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("BookGenres");
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Books.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Books.Genre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genres");
                 });
 
             modelBuilder.Entity("DataDomain.DataTables.Inventories.Stock", b =>
@@ -218,9 +424,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Discount")
-                        .HasColumnType("int");
-
                     b.Property<int>("InvoiceId")
                         .HasColumnType("int");
 
@@ -228,9 +431,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Tax")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Total")
@@ -281,7 +481,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<decimal>("DiscountTotal")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Reference")
+                    b.Property<string>("InvoiceNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("SubTotal")
@@ -305,11 +505,23 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("AmountTendered")
+                    b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Change")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("CustomLastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerFirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCaptured")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("InvoiceId")
                         .HasColumnType("int");
@@ -474,7 +686,7 @@ namespace DataAccessLayer.Migrations
                             Description = "Fiction Book by Jane Austen",
                             DiscountId = 1,
                             ImagePath = "assets/Products/Books/pp.jpg",
-                            Name = "Book Pride and Prejudice",
+                            Name = "Pride and Prejudice",
                             PurchasePrice = 59.99m,
                             SalePrice = 99.50m,
                             TaxId = 1,
@@ -488,11 +700,11 @@ namespace DataAccessLayer.Migrations
                             DiscountId = 2,
                             ImagePath = "assets/Products/Books/got.jpg",
                             Name = "A Game Of Thrones",
-                            PurchasePrice = 80.90m,
-                            SalePrice = 12.30m,
+                            PurchasePrice = 80.99m,
+                            SalePrice = 250.50m,
                             TaxId = 1,
                             ISBN = "9780316160193",
-                            Title = "A Game Of Thrones (A song of fire and ice)"
+                            Title = "A Game Of Thrones"
                         },
                         new
                         {
@@ -501,22 +713,127 @@ namespace DataAccessLayer.Migrations
                             DiscountId = 3,
                             ImagePath = "assets/Products/Books/boundaries.jpg",
                             Name = "Boundaries",
-                            PurchasePrice = 259.99m,
+                            PurchasePrice = 59.99m,
                             SalePrice = 199.50m,
                             TaxId = 1,
                             ISBN = "9780316015844",
                             Title = "Boundaries when to say Yes and No"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "A Girl Intrigue In",
+                            DiscountId = 3,
+                            ImagePath = "assets/Products/Books/GirlA.jfif",
+                            Name = "Girl A",
+                            PurchasePrice = 80.00m,
+                            SalePrice = 120.00m,
+                            TaxId = 1,
+                            ISBN = "9780316015844",
+                            Title = "Girl A"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Fiction Book by Julia Cameron",
+                            DiscountId = 2,
+                            ImagePath = "assets/Products/Books/thehandmaidstale.jfif",
+                            Name = "The Handmaid's Tale",
+                            PurchasePrice = 120.99m,
+                            SalePrice = 209.50m,
+                            TaxId = 1,
+                            ISBN = "9780316015844",
+                            Title = "The Handmaid's Tale"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "Fiction Book by J.K tolkein",
+                            DiscountId = 3,
+                            ImagePath = "assets/Products/Books/thehobbit.jfif",
+                            Name = "The Hobbit",
+                            PurchasePrice = 259.99m,
+                            SalePrice = 199.50m,
+                            TaxId = 1,
+                            ISBN = "9780316015844",
+                            Title = "The Hobbit"
                         });
                 });
 
-            modelBuilder.Entity("DataDomain.DataTables.Books.AudioBook", b =>
+            modelBuilder.Entity("DataDomain.DataTables.Books.Author", b =>
                 {
-                    b.HasBaseType("DataDomain.DataTables.Books.Book");
+                    b.HasOne("DataDomain.DataTables.Base.Gender", "Gender")
+                        .WithMany()
+                        .HasForeignKey("GenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("VoicedBy")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasOne("DataDomain.DataTables.Base.Title", "Title")
+                        .WithMany()
+                        .HasForeignKey("TitleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasDiscriminator().HasValue("AudioBook");
+                    b.Navigation("Gender");
+
+                    b.Navigation("Title");
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Books.BookJoins.BookAuthor", b =>
+                {
+                    b.HasOne("DataDomain.DataTables.Books.Author", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataDomain.DataTables.Books.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Books.BookJoins.BookCategory", b =>
+                {
+                    b.HasOne("DataDomain.DataTables.Books.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataDomain.DataTables.Books.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("DataDomain.DataTables.Books.BookJoins.BookGenre", b =>
+                {
+                    b.HasOne("DataDomain.DataTables.Books.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataDomain.DataTables.Books.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Genre");
                 });
 
             modelBuilder.Entity("DataDomain.DataTables.Inventories.Stock", b =>

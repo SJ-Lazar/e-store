@@ -8,9 +8,13 @@ namespace DataDomain.DataTables.Transactions
     {
         public int Id { get; set; }
         public string ReceiptNumber { get; set; }
+        public string CustomerEmail { get; set; }
+        public string CustomerFirstName { get; set; }
+        public string CustomLastName { get; set; }
+        public DateTime DateCaptured { get; set; }
+        public string CustomerId { get; set; }
         public int InvoiceId { get; set; }
         public Invoice Invoice { get; set; }
-        public decimal AmountTendered { get; set; }
-        public decimal Change { get; set; }
+        public decimal Amount { get; set; }
     }
 }

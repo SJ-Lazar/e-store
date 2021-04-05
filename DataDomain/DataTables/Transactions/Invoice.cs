@@ -8,7 +8,7 @@ namespace DataDomain.DataTables.Transactions
     public class Invoice
     {
         public int Id { get; set; }
-        public string Reference { get; set; }
+        public string InvoiceNumber { get; set; }
         public decimal SubTotal { get; set; }
         public decimal DiscountTotal { get; set; }
         public decimal TaxTotal { get; set; }

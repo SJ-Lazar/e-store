@@ -50,17 +50,12 @@ namespace e_storeWebAPP.Controllers
         {
             var userfromDb = await _userManager.FindByNameAsync(model.Username);
 
-            if (userfromDb == null)
-            {
-                return BadRequest();
-            }
+            if (userfromDb == null) return BadRequest();
+            
 
             var result = await _signInManager.CheckPasswordSignInAsync(userfromDb, model.Password, false);
 
-            if (!result.Succeeded)
-            {
-                return BadRequest();
-            }
+            if (!result.Succeeded) return BadRequest();        
 
             var roles = await _userManager.GetRolesAsync(userfromDb);
 
@@ -108,10 +103,8 @@ namespace e_storeWebAPP.Controllers
 
                 await _emailSender.SendEmailAsync(senderEmail, userFromDb.Email, "Confirm your email address", urlString);
 
-
                 //add role to user 
                 await _userManager.AddToRoleAsync(userFromDb, model.Role);
-
 
                 var claim = new Claim("Jobtitle", model.JobTitle);
                 await _userManager.AddClaimAsync(userFromDb, claim);
@@ -122,6 +115,8 @@ namespace e_storeWebAPP.Controllers
             return BadRequest(result);
         }
 
+
+
         [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailUserDTO model)
         {
@@ -129,10 +124,8 @@ namespace e_storeWebAPP.Controllers
 
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
 
-            if (result.Succeeded)
-            {
-                return Ok();
-            }
+            if (result.Succeeded) return Ok();
+            
             return BadRequest();
         } 
         #endregion

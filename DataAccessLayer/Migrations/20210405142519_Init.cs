@@ -49,6 +49,19 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Discounts",
                 columns: table => new
                 {
@@ -63,12 +76,38 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Genders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Sex = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Genres",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Genres", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Invoices",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Reference = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InvoiceNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DiscountTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TaxTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -91,6 +130,19 @@ namespace DataAccessLayer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Taxes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Titles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Titles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -206,9 +258,13 @@ namespace DataAccessLayer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReceiptNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CustomerEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CustomerFirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CustomLastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCaptured = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CustomerId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     InvoiceId = table.Column<int>(type: "int", nullable: false),
-                    AmountTendered = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Change = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -236,8 +292,7 @@ namespace DataAccessLayer.Migrations
                     TaxId = table.Column<int>(type: "int", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ISBN = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VoicedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -257,14 +312,92 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Authors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LasteName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TitleId = table.Column<int>(type: "int", nullable: false),
+                    GenderId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Authors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Authors_Genders_GenderId",
+                        column: x => x.GenderId,
+                        principalTable: "Genders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Authors_Titles_TitleId",
+                        column: x => x.TitleId,
+                        principalTable: "Titles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookCategories_Products_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookGenres",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    GenreId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookGenres", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookGenres_Genres_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genres",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookGenres_Products_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SaleItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Discount = table.Column<int>(type: "int", nullable: false),
-                    Tax = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     InvoiceId = table.Column<int>(type: "int", nullable: false)
@@ -306,6 +439,37 @@ namespace DataAccessLayer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "BookAuthors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    AuthorId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookAuthors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookAuthors_Authors_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Authors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookAuthors_Products_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "8a2956f3-aaea-4b1c-ad71-989d7287eef8", 0, "dd79515c-b1a8-4a9c-8bf4-eeef2760bad2", null, true, "salman", "lazar", false, null, null, "ADMIN", "1234", null, false, "08418325-8ed4-40fd-9355-95431bbd17cc", false, "admin" });
+
             migrationBuilder.InsertData(
                 table: "Discounts",
                 columns: new[] { "Id", "Name", "Percentage" },
@@ -317,24 +481,42 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Genders",
+                columns: new[] { "Id", "Sex" },
+                values: new object[,]
+                {
+                    { 1, "Male" },
+                    { 2, "Female" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Taxes",
                 columns: new[] { "Id", "Name", "Percentage" },
                 values: new object[] { 1, "vat", 15 });
 
             migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "Id", "Description", "DiscountId", "Discriminator", "ISBN", "ImagePath", "Name", "PurchasePrice", "SalePrice", "TaxId", "Title" },
-                values: new object[] { 1, "Fiction Book by Jane Austen", 1, "Book", "9780061964367", "assets/Products/Books/pp.jpg", "Book Pride and Prejudice", 59.99m, 99.50m, 1, "Pride and Prejudice" });
+                table: "Titles",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Mr" },
+                    { 2, "Mrs" },
+                    { 3, "Miss" },
+                    { 4, "Dr" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "Description", "DiscountId", "Discriminator", "ISBN", "ImagePath", "Name", "PurchasePrice", "SalePrice", "TaxId", "Title" },
-                values: new object[] { 2, "Fiction Book by GEORGE RR MARTIN", 2, "Book", "9780316160193", "assets/Products/Books/got.jpg", "A Game Of Thrones", 80.90m, 12.30m, 1, "A Game Of Thrones (A song of fire and ice)" });
-
-            migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "Id", "Description", "DiscountId", "Discriminator", "ISBN", "ImagePath", "Name", "PurchasePrice", "SalePrice", "TaxId", "Title" },
-                values: new object[] { 3, "Fiction Book by Dr. Henry Cloud", 3, "Book", "9780316015844", "assets/Products/Books/boundaries.jpg", "Boundaries", 259.99m, 199.50m, 1, "Boundaries when to say Yes and No" });
+                values: new object[,]
+                {
+                    { 1, "Fiction Book by Jane Austen", 1, "Book", "9780061964367", "assets/Products/Books/pp.jpg", "Pride and Prejudice", 59.99m, 99.50m, 1, "Pride and Prejudice" },
+                    { 2, "Fiction Book by GEORGE RR MARTIN", 2, "Book", "9780316160193", "assets/Products/Books/got.jpg", "A Game Of Thrones", 80.99m, 250.50m, 1, "A Game Of Thrones" },
+                    { 3, "Fiction Book by Dr. Henry Cloud", 3, "Book", "9780316015844", "assets/Products/Books/boundaries.jpg", "Boundaries", 59.99m, 199.50m, 1, "Boundaries when to say Yes and No" },
+                    { 4, "A Girl Intrigue In", 3, "Book", "9780316015844", "assets/Products/Books/GirlA.jfif", "Girl A", 80.00m, 120.00m, 1, "Girl A" },
+                    { 5, "Fiction Book by Julia Cameron", 2, "Book", "9780316015844", "assets/Products/Books/thehandmaidstale.jfif", "The Handmaid's Tale", 120.99m, 209.50m, 1, "The Handmaid's Tale" },
+                    { 6, "Fiction Book by J.K tolkein", 3, "Book", "9780316015844", "assets/Products/Books/thehobbit.jfif", "The Hobbit", 259.99m, 199.50m, 1, "The Hobbit" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Stocks",
@@ -391,6 +573,46 @@ namespace DataAccessLayer.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Authors_GenderId",
+                table: "Authors",
+                column: "GenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Authors_TitleId",
+                table: "Authors",
+                column: "TitleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookAuthors_AuthorId",
+                table: "BookAuthors",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookAuthors_BookId",
+                table: "BookAuthors",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookCategories_BookId",
+                table: "BookCategories",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookCategories_CategoryId",
+                table: "BookCategories",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookGenres_BookId",
+                table: "BookGenres",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookGenres_GenreId",
+                table: "BookGenres",
+                column: "GenreId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_DiscountId",
                 table: "Products",
                 column: "DiscountId");
@@ -439,6 +661,15 @@ namespace DataAccessLayer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BookAuthors");
+
+            migrationBuilder.DropTable(
+                name: "BookCategories");
+
+            migrationBuilder.DropTable(
+                name: "BookGenres");
+
+            migrationBuilder.DropTable(
                 name: "Receipts");
 
             migrationBuilder.DropTable(
@@ -454,10 +685,25 @@ namespace DataAccessLayer.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Authors");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Genres");
+
+            migrationBuilder.DropTable(
                 name: "Invoices");
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Genders");
+
+            migrationBuilder.DropTable(
+                name: "Titles");
 
             migrationBuilder.DropTable(
                 name: "Discounts");

@@ -8,12 +8,12 @@ namespace e_storeWebAPP.DTOModels
 {
     public class CreateInvoiceDTO
     {    
-        public string Reference { get; set; }
+        public string InvoiceNumber { get; set; }
         public decimal SubTotal { get; set; }
         public decimal DiscountTotal { get; set; }
         public decimal TaxTotal { get; set; }
         public decimal Total { get; set; }
-        public ICollection<SaleItemDTO> SaleItems { get; set; }
+        public ICollection<CreateSaleItemDTO> SaleItems { get; set; }
      
     }
     public class InvoiceDTO : CreateInvoiceDTO

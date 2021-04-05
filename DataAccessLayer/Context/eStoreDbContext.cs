@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.SeedData.Configurations;
 using DataDomain.DataTables.Base;
 using DataDomain.DataTables.Books;
+using DataDomain.DataTables.Books.BookJoins;
 using DataDomain.DataTables.Inventories;
 using DataDomain.DataTables.Products;
 using DataDomain.DataTables.Sales;
@@ -21,7 +22,14 @@ namespace DataAccessLayer.Context
 
         #region DbSets
         public DbSet<Book> Books { get; set; }
-        public DbSet<AudioBook> AudioBooks { get; set; }
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<BookAuthor> BookAuthors { get; set; }
+        public DbSet<BookGenre> BookGenres { get; set; }
+        public DbSet<BookCategory> BookCategories { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Gender> Genders { get; set; }
+        public DbSet<Title> Titles { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Discount> Discounts { get; set; }
@@ -36,12 +44,13 @@ namespace DataAccessLayer.Context
         {
             base.OnModelCreating(builder);
 
-           
-
             builder.ApplyConfiguration(new BookConfiguration());
             builder.ApplyConfiguration(new StockConfiguration());
             builder.ApplyConfiguration(new DiscountConfiguration());
             builder.ApplyConfiguration(new TaxConfiguration());
+            builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfiguration(new GenderConfiguration());
+            builder.ApplyConfiguration(new TitleConfiguration());
         } 
         #endregion
     }

@@ -10,14 +10,7 @@ namespace e_storeWebAPP.Repositories.UnitsofWork
 {
     public interface IUnitOfWork : IDisposable
     {
-        #region Generic Injection Propertise
-        IGenericRepository<Book> Books { get; }
-        IGenericRepository<Invoice> Invoices { get; }
-        IGenericRepository<Receipt> Receipts { get; }
-        #endregion
-
-        #region UOW Methods
-        Task Save(); 
-        #endregion
+        IGenericStoredProcedureRepository GenericStoredProcedure { get; }
+        void Save();
     }
 }

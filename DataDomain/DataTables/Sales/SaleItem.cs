@@ -10,8 +10,6 @@ namespace DataDomain.DataTables.Sales
     {
         public int Id { get; set; }
         public int Quantity { get; set; }
-        public int Discount { get; set; }
-        public int Tax { get; set; }
         public int ProductId { get; set; }
         public Product Product { get; set; }
         public decimal Total { get; set; }

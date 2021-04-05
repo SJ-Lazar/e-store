@@ -9,8 +9,6 @@ namespace e_storeWebAPP.DTOModels
     {
         public int Quantity { get; set; }
         public int ProductId { get; set; } 
-        public int DiscountId { get; set; }   
-        public int TaxId { get; set; } 
         public decimal Total { get; set; }
         public int InvoiceId { get; set; }
     }

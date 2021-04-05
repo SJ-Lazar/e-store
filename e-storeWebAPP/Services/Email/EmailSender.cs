@@ -17,7 +17,7 @@ namespace e_storeWebAPP.Services.Email
             _config = config;
 
         }
-        public async  Task SendEmailAsync(string fromAddress, string toAddress, string subject, string message)
+        public async Task SendEmailAsync(string fromAddress, string toAddress, string subject, string message)
         {
             var mailMessage = new MailMessage(fromAddress, toAddress, subject, message);
 
@@ -29,6 +29,5 @@ namespace e_storeWebAPP.Services.Email
                 await client.SendMailAsync(mailMessage);
             }
         }
-
     }
 }
